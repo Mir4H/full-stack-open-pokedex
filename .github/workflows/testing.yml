@@ -30,6 +30,3 @@ jobs:
         env:
           DOESNT_CONTAIN_SKIP_HASHTAG: ${{ !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: echo "$DOESNT_CONTAIN_SKIP_HASHTAG"
-      - name: url and author
-        run: |
-            echo "${{ github.event.head_commit.url }} by ${{ github.event.head_commit.author.name }}"
