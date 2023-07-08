@@ -48,7 +48,7 @@ jobs:
         with:
           severity: info
           text: A new version of Pokedex deployed
-          description: to https://full-stack-open-pokedex-mh-7d8bbd14b41c.herokuapp.com/ by ${{ github.event.head_commit.author.name }}
+          description: to https://full-stack-open-pokedex-mh-7d8bbd14b41c.herokuapp.com/ by ${{ github.event.commits[0].committer.username }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Notify Failure
         uses: rjstone/discord-webhook-notify@v1.0.4
@@ -56,7 +56,7 @@ jobs:
         with:
           severity: error
           text: Build failed
-          details: Commit ${{ github.event.head_commit.url }} by ${{ github.event.head_commit.author.name }} broke the build
+          description: Commit ${{ github.event.head_commit.url }} by ${{ github.event.commits[0].committer.username }} broke the build
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
 
