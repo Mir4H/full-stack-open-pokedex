@@ -19,12 +19,12 @@ jobs:
         if: ${{ failure() }}
         with:
           severity: error
-          description: Health Check Failed!
+          description: ${{ github.repository }} Health Check Failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Health Check Success
         uses: rjstone/discord-webhook-notify@v1.0.4
         if: ${{ success() }}
         with:
           severity: info
-          description: Health Check Succeeded!
+          description: ${{ github.repository }} Health Check Succeeded!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
