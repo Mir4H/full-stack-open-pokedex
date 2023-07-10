@@ -1,8 +1,7 @@
 name: Health Check
 on:
-  push:
-    branches:
-      - green
+  schedule:
+    - cron: '15 * * * *'
 
 jobs:   
   health_check:
@@ -19,12 +18,14 @@ jobs:
         if: ${{ failure() }}
         with:
           severity: error
-          description: ${{ github.repository }} Health Check Failed!
+          text: Health Check Failed!
+          description: ${{ github.repository }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Health Check Success
         uses: rjstone/discord-webhook-notify@v1.0.4
         if: ${{ success() }}
         with:
           severity: info
-          description: ${{ github.repository }} Health Check Succeeded!
+          text: Health Check Succeeded!
+          description: ${{ github.repository }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
