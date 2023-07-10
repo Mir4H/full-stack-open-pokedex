@@ -1,7 +1,13 @@
+# yamllint disable-file
 name: Health Check
 on:
-  schedule:
-    - cron: '15 * * * *'
+  #schedule:
+  #  - cron: '0 12 * * *'
+
+#diable periodic check
+  push:
+    branches:
+      - '**'
 
 jobs:   
   health_check:
