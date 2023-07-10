@@ -22,7 +22,7 @@ jobs:
       - name: Check style
         run: npm run eslint
       - name: build
-        run: npm run build
+        run: npm run buil
       - name: test
         run: npm run test
       - name: e2e tests
@@ -31,6 +31,15 @@ jobs:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:5000
+      - name: Notify Failure
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        if: ${{ failure() }}
+        with:
+          severity: error
+          text: Build failed
+          description: Commit
+          details: https://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.triggering_actor }} broke the build
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: deploy to heroku
         uses: akhileshns/heroku-deploy@v3.12.14
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
@@ -42,21 +51,13 @@ jobs:
           checkstring: "ok"
           delay: 5
           rollbackonhealthcheckfailed: true
-      - name: Notify Failure
-        uses: rjstone/discord-webhook-notify@v1.0.4
-        if: ${{ failure() && github.event_name == 'push'}}
-        with:
-          severity: error
-          text: Build failed
-          description: Commit ${{ github.event.head_commit.url }} by ${{github.triggering_actor}} broke the build
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Notify Success
         uses: rjstone/discord-webhook-notify@v1.0.4
         if: ${{ success() && github.event_name == 'push'}}
         with:
           severity: info
           text: A new version of Pokedex deployed
-          description: to ${{github.event.pull_request.base.repo.homepage}} by ${{github.triggering_actor}}
+          description: to https://full-stack-open-pokedex-mh-7d8bbd14b41c.herokuapp.com/ by ${{ github.triggering_actor }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
 
